@@ -41,10 +41,6 @@ function setup() {
   userInput = select('#userinput');
   counter = select('#counter');
   searchTermMeta(userInput.value());
-  userInput.changed(() => {
-    scrapes = scrapeNumber;
-    searchTermMeta(userInput.value());
-  });
 }
 
 function go(term) {
