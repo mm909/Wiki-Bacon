@@ -7,7 +7,7 @@ let termMeta = [];
 let termTitle = [];
 let termKeyWords = [];
 let termContent = [];
-let invalid = ["the", 'ref', 'com','a','of','in','and','url','code','to', 'that','www','title']
+let invalid = ["the", 'ref', 'com','a','of','in','and','url','code','to', 'that','www','title','web','http','https','name']
 
 Array.prototype.contains = function(element){
     return this.indexOf(element) > -1;
