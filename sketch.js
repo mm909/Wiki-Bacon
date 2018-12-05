@@ -22,8 +22,9 @@ let invalid = [
 ]
 
 let userInput;
+let counter;
 
-let scrapeNumber = 7;
+let scrapeNumber = 6;
 let scrapes = scrapeNumber;
 
 let termMeta = [];
@@ -38,6 +39,7 @@ Array.prototype.contains = function(element) {
 function setup() {
   noCanvas();
   userInput = select('#userinput');
+  counter = select('#counter');
   searchTermMeta(userInput.value());
   userInput.changed(() => {
     scrapes = scrapeNumber;
@@ -46,8 +48,19 @@ function setup() {
 }
 
 function go(term) {
-  scrapes = scrapeNumber;
-  searchTermMeta(userInput.value());
+  if(scrapes == -1){
+    scrapes = scrapeNumber;
+    termMeta = [];
+    termTitle = [];
+    termKeyWords = [];
+    termContent = [];
+    let o = select('#output');
+    if(o){
+      o.remove()
+    }
+    searchTermMeta(userInput.value());
+  }
+
 }
 
 function searchTermMeta(term) {
@@ -64,18 +77,23 @@ function searchTermMeta(term) {
     console.log(termTitle);
     console.log("Content");
     console.log(termContent);
+
+    let contentForDiv = "";
+    for (var i = 0; i < termMeta.length; i++) {
+      contentForDiv+="Key word:     <strong>" + termKeyWords[i] + "</strong> <br> Wiki Artical: " + termTitle[i] + "<br><br>"
+    }
+    let output = createDiv(contentForDiv)
+    output.id('output')
   }
   scrapes--;
 }
 
 function gotSearch(data) {
+  // console.log(counter.html());
+  counter.html(scrapeNumber-scrapes + "/" + scrapeNumber)
   termKeyWords.push(data[0].toLowerCase())
   let title = data[1][floor(random(data[1].length))];
   termTitle.push(title)
-
-  createDiv("Key word:     <strong>" + data[0] + "</strong>");
-  createDiv("Wiki Artical: " + title);
-  createDiv("<br>");
 
   if (title)
     title = title.replace(/\s+/g, '_');
@@ -97,6 +115,7 @@ function gotContent(data) {
   for (var i = 0; i < words.length; i++) {
     wordCounts[words[i]] = (wordCounts[words[i]] || 0) + 1;
   }
+  let topX = [];
   let mostUsedWord = "";
   let mostUsedCount = 0;
   for (var i = 0; i < words.length; i++) {
@@ -108,7 +127,9 @@ function gotContent(data) {
     ) {
       mostUsedWord = words[i]
       mostUsedCount = wordCounts[words[i]]
+      topX.push(words[i])
     }
   }
   searchTermMeta(mostUsedWord);
+  // searchTermMeta(random(words));
 }
